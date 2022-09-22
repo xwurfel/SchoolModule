@@ -1,4 +1,5 @@
-﻿using Kursova.Services;
+﻿using Kursova.Const;
+using Kursova.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,28 @@ namespace Kursova
             //p = new Services.ProfessorsService("1121312", 0, 0, new Entity_Framework.LessonsDate() { DateTime = new DateTime(1, 11, 1)}, 1);
             //s.Clear();
             s = new StudentsService();
-            
+            p = new ProfessorsService();
+            s.ClearStudents();
+            p.ClearProfessors();
+            p.ClearSchedules();
+            List<Subject> a = new List<Subject>() { Subject.English, Subject.Math, Subject.Physics };
+            var list = new List<int>() { 1, 2, 3 };
+            s.AddStudent("13223", 1, 1, a);
+            p.AddProfessor("12312", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(11, 1, 10) }, 1, list);
+            p.AddProfessor("adw123", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(21, 1, 10) }, 1, list);
+            p.AddProfessor("1213", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(13, 1, 10) }, 1, list);
+            var qwe = p.GetProfessorsBySubject(Subject.English);
+
+            foreach(var el in qwe)
+            {
+                this.textBox.Text += el.Name.ToString();
+                this.textBox.Text += "\n";
+            }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

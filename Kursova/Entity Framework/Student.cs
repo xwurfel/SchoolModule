@@ -11,7 +11,7 @@ namespace Kursova.Entity_Framework
     {
         public int CourseNumber { get; set; } = 1;
         public int GroupNumber { get; set; } = 1;
-        public Const.Enums.Subject Subjects { get; set; }
+        public List<Const.Subject> Subjects { get; set; }
 
     }
 }

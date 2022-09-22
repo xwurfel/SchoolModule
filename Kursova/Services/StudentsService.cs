@@ -17,7 +17,7 @@ namespace Kursova.Services
             db = new EntityLogicContext();
         }
 
-        public StudentsService(string name, int courseNumber, int groupNumber, Enums.Subject subjects)
+        public StudentsService(string name, int courseNumber, int groupNumber, List<Subject> subjects)
         {
             db = new EntityLogicContext();
             Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
@@ -25,7 +25,7 @@ namespace Kursova.Services
             db.SaveChanges();
         }
 
-        public void AddStudent(string name, int courseNumber, int groupNumber, Enums.Subject subjects)
+        public void AddStudent(string name, int courseNumber, int groupNumber, List<Subject> subjects)
         {
             Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
             db.students.Add(s);

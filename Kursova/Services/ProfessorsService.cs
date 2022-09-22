@@ -1,7 +1,7 @@
 ﻿using Kursova.Entity_Framework;
 using System.Collections.Generic;
 using System.Linq;
-using static Kursova.Const.Enums;
+using Kursova.Const;
 
 namespace Kursova.Services
 {
@@ -13,18 +13,18 @@ namespace Kursova.Services
         {
             db = new EntityLogicContext();
         }
-        public ProfessorsService(string name, Subject subjects, Position position, LessonsDate schedule, int experience)
+        public ProfessorsService(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups)
         {
             db = new EntityLogicContext();
-            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule  };
+            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups =  groups  };
             db.dates.Add(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(string name, Subject subjects, Position position, LessonsDate schedule, int experience)
+        public void AddProfessor(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups)
         {
-            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule };
+            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups = groups };
             db.dates.Add(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
@@ -38,7 +38,7 @@ namespace Kursova.Services
 
         public List<Professor> GetProfessorsBySubject(Subject subject)
         {
-            return db.professors.ToList().Where(x => x.Subjects.Equals(subject)).ToList();
+            return db.professors.ToList().Where(x => x.Subjects.Contains(subject)).ToList();
         }
 
 
