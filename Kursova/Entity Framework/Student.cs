@@ -9,9 +9,9 @@ namespace Kursova.Entity_Framework
 {
     internal class Student: Person
     {
-        public int courseNumber { get; set; } = 1;
-        public int groupNumber { get; set; } = 1;
-        public Const.Enums.Subject subjects { get; set; } = Const.Enums.Subject.Math;
+        public int CourseNumber { get; set; } = 1;
+        public int GroupNumber { get; set; } = 1;
+        public Const.Enums.Subject Subjects { get; set; }
 
     }
 }

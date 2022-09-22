@@ -20,14 +20,14 @@ namespace Kursova.Services
         public StudentsService(string name, int courseNumber, int groupNumber, Enums.Subject subjects)
         {
             db = new EntityLogicContext();
-            Student s = new Student() { courseNumber = courseNumber, groupNumber = groupNumber, Name = name, subjects = subjects };
+            Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
             db.students.Add(s);
             db.SaveChanges();
         }
 
         public void AddStudent(string name, int courseNumber, int groupNumber, Enums.Subject subjects)
         {
-            Student s = new Student() { courseNumber = courseNumber, groupNumber = groupNumber, Name = name, subjects = subjects };
+            Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
             db.students.Add(s);
             db.SaveChanges();
         }
