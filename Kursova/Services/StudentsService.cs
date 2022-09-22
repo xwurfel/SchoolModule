@@ -30,7 +30,23 @@ namespace Kursova.Services
             Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
             db.students.Add(s);
             db.SaveChanges();
+
         }
+        public List<Student> GetStudentsByProfessor(Professor professor)
+        {
+            return db.students.ToList().Where(x => professor.Courses.Contains(x.CourseNumber)).ToList();
+        }
+
+        public List<Student> GetStudentsByCourse(int course)
+        {
+            return db.students.ToList().Where(x => x.CourseNumber == course).ToList();
+        }
+
+        public void ClearOldDates()
+        {
+            
+        }
+
 
         public void RemoveStudent(string name)
         {

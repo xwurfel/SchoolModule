@@ -1,4 +1,5 @@
 ﻿using Kursova.Const;
+using Kursova.Entity_Framework;
 using Kursova.Services;
 using System;
 using System.Collections.Generic;
@@ -37,21 +38,45 @@ namespace Kursova
             p.ClearSchedules();
             List<Subject> a = new List<Subject>() { Subject.English, Subject.Math, Subject.Physics };
             var list = new List<int>() { 1, 2, 3 };
-            s.AddStudent("13223", 1, 1, a);
-            p.AddProfessor("12312", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(11, 1, 10) }, 1, list);
-            p.AddProfessor("adw123", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(21, 1, 10) }, 1, list);
-            p.AddProfessor("1213", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(13, 1, 10) }, 1, list);
-            var qwe = p.GetProfessorsBySubject(Subject.English);
+            var list2 = new List<int>() { 1, 2, 3, 4 };
+            var list3 = new List<int>() { 1 };
+            s.AddStudent("1", 1, 1, a);
+            s.AddStudent("2", 1, 1, a);
+            s.AddStudent("3", 1, 1, a);
+            s.AddStudent("4", 2, 1, a);
+            s.AddStudent("5", 2, 1, a);
+            s.AddStudent("6", 2, 1, a);
+            p.AddProfessor("1", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(11, 1, 10) }, 1, list, new List<int>() { 1, 2});
+            p.AddProfessor("2", a, Position.Dean, new Entity_Framework.LessonsDate() { DateTime = new DateTime(21, 1, 10) }, 1, list2, new List<int>() { 1, 2 });
+            p.AddProfessor("3", a, Position.Lecturer, new Entity_Framework.LessonsDate() { DateTime = new DateTime(13, 1, 10) }, 1, list3, new List<int>() { 1 });
+            p.AddProfessor("4", a, Position.Lecturer, new Entity_Framework.LessonsDate() { DateTime = new DateTime(213, 1, 10) }, 1, list3, new List<int>() { 1 });
 
+            Professor professor = new Professor() { Name = "5", Subjects = a, Position = Position.Lecturer, Schedule = new Entity_Framework.LessonsDate() { DateTime = new DateTime(213, 1, 10) }, Experience = 1, Groups = list3, Courses = new List<int>() { 1, 2 } };
+
+            /*var qwe = p.GetProfessorsBySubject(Subject.English);
+            
             foreach(var el in qwe)
             {
                 this.textBox.Text += el.Name.ToString();
                 this.textBox.Text += "\n";
-            }
-        }
+            }*/
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
+
+            //this.textBox.Text = p.GetMostPopularBySubject(Subject.Math).Name ?? "123";
+
+            /*var qwe = p.GetFreeByDate(new DateTime(11, 1, 10));
+            foreach (var el in qwe)
+            {
+                this.textBox.Text += el.Name.ToString() + " " + el.Position.ToString() + " " + el.Groups.Count.ToString() + " " + el.Schedule.DateTime.ToString();
+                this.textBox.Text += "\n";
+            }*/
+
+            var qw = s.GetStudentsByCourse(2);
+            foreach (var el in qw)
+            {
+                this.textBox.Text += el.Name.ToString();
+                this.textBox.Text += "\n";
+            }
 
         }
     }

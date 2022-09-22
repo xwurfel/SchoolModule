@@ -40,6 +40,17 @@ namespace Kursova.Entity_Framework
                 );
 
             modelBuilder
+                .Entity<Professor>()
+                .Property(e => e.Courses)
+                .HasConversion(
+                    v => string.Join(",", v.Select(e => e.ToString("D")).ToArray()),
+                    v => v.Split(new[] { ',' })
+                      .Select(e => int.Parse(e))
+                      .Cast<int>()
+                      .ToList()
+                );
+
+            modelBuilder
                .Entity<Student>()
                .Property(e => e.Subjects)
                .HasConversion(
@@ -54,7 +65,7 @@ namespace Kursova.Entity_Framework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=database2.db");
+            optionsBuilder.UseSqlite("Data Source=database3.db");
         }
     }
 }

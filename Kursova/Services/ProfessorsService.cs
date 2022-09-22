@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kursova.Const;
+using System;
 
 namespace Kursova.Services
 {
@@ -13,18 +14,18 @@ namespace Kursova.Services
         {
             db = new EntityLogicContext();
         }
-        public ProfessorsService(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups)
+        public ProfessorsService(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups, List<int> courses)
         {
             db = new EntityLogicContext();
-            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups =  groups  };
+            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups =  groups, Courses = courses  };
             db.dates.Add(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups)
+        public void AddProfessor(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups, List<int> courses)
         {
-            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups = groups };
+            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups = groups, Courses = courses };
             db.dates.Add(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
@@ -36,10 +37,34 @@ namespace Kursova.Services
             db.SaveChanges();
         }
 
-        public List<Professor> GetProfessorsBySubject(Subject subject)
+        public List<Professor> GetBySubject(Subject subject)
         {
             return db.professors.ToList().Where(x => x.Subjects.Contains(subject)).ToList();
         }
+
+        public Professor? GetMostPopularBySubject(Subject subject)
+        {
+            return GetBySubject(subject).MaxBy(x => x.Groups.Count);
+        }
+
+        public List<Professor> SortByPositionThenByName()
+        {
+            return db.professors.ToList().OrderBy(x => x.Position).ThenBy(x => x.Name).ToList();
+        }
+
+        public List<Professor> GetWithOnlyOneGroup()
+        {
+            return db.professors.ToList().Where(x => x.Groups.Count == 1).ToList();
+        }
+
+        public List<Professor> GetFreeByDate(DateTime dateTime)
+        {
+            return db.professors.ToList().Where(x => x.Schedule.DateTime != dateTime).ToList();
+        }
+
+
+
+
 
 
         public void ClearProfessors()
