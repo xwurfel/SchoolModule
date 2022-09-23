@@ -52,9 +52,9 @@ namespace Kursova.Services
             return db.professors.ToList().OrderBy(x => x.Position).ThenBy(x => x.Name).ToList();
         }
 
-        public List<Professor> GetWithOnlyOneGroup()
+        public List<Professor> GetWithOnlyOneCourse()
         {
-            return db.professors.ToList().Where(x => x.Groups.Count == 1).ToList();
+            return db.professors.ToList().Where(x => x.Courses.Count == 1).ToList();
         }
 
         public List<Professor> GetFreeByDate(DateTime dateTime)
