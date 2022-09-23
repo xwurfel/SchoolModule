@@ -66,9 +66,10 @@ namespace Kursova.Services
         public void ClearOldDates()
         {
             db.dates.RemoveRange(db.dates.Where(x => x.DateTime < DateTime.Now));
+            db.SaveChanges();
         }
 
-
+         
 
         public void ClearProfessors()
         {
