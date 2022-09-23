@@ -13,7 +13,7 @@ namespace Kursova.Entity_Framework
         public List<int>? Groups { get; set; }
         public List<int>? Courses { get; set; }
         public Const.Position Position { get; set; }
-        public LessonsDate? Schedule { get; set; } = null;
+        public List<LessonsDate>? Schedule { get; set; } = null;
         public int Experience { get; set; } = 0;
 
     }

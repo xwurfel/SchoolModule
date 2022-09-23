@@ -14,19 +14,19 @@ namespace Kursova.Services
         {
             db = new EntityLogicContext();
         }
-        public ProfessorsService(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups, List<int> courses)
+        public ProfessorsService(string name, List<Subject> subjects, Position position, List<LessonsDate> schedule, int experience, List<int> groups, List<int> courses)
         {
             db = new EntityLogicContext();
             Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups =  groups, Courses = courses  };
-            db.dates.Add(p.Schedule);
+            db.dates.AddRange(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(string name, List<Subject> subjects, Position position, LessonsDate schedule, int experience, List<int> groups, List<int> courses)
+        public void AddProfessor(string name, List<Subject> subjects, Position position, List<LessonsDate> schedule, int experience, List<int> groups, List<int> courses)
         {
             Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups = groups, Courses = courses };
-            db.dates.Add(p.Schedule);
+            db.dates.AddRange(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
@@ -59,7 +59,7 @@ namespace Kursova.Services
 
         public List<Professor> GetFreeByDate(DateTime dateTime)
         {
-            return db.professors.ToList().Where(x => x.Schedule.DateTime != dateTime).ToList();
+            return db.professors.ToList().Where(x => !x.Schedule.Contains(new LessonsDate { DateTime = dateTime })).ToList();
         }
 
 

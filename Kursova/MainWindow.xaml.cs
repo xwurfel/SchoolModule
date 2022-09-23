@@ -46,12 +46,18 @@ namespace Kursova
             s.AddStudent("4", 2, 1, a);
             s.AddStudent("5", 2, 1, a);
             s.AddStudent("6", 2, 1, a);
-            p.AddProfessor("1", a, Position.Rector, new Entity_Framework.LessonsDate() { DateTime = new DateTime(11, 1, 10) }, 1, list, new List<int>() { 1, 2});
-            p.AddProfessor("2", a, Position.Dean, new Entity_Framework.LessonsDate() { DateTime = new DateTime(21, 1, 10) }, 1, list2, new List<int>() { 1, 2 });
-            p.AddProfessor("3", a, Position.Lecturer, new Entity_Framework.LessonsDate() { DateTime = new DateTime(13, 1, 10) }, 1, list3, new List<int>() { 1 });
-            p.AddProfessor("4", a, Position.Lecturer, new Entity_Framework.LessonsDate() { DateTime = new DateTime(213, 1, 10) }, 1, list3, new List<int>() { 1 });
+            p.AddProfessor("1", a, Position.Rector, new List<Entity_Framework.LessonsDate>() {  new LessonsDate { DateTime = new DateTime(1, 1, 10) }, new LessonsDate { DateTime = new DateTime(2, 1, 10) } }, 1, list, new List<int>() { 1, 2});
+            p.AddProfessor("2", a, Position.Dean, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(3, 1, 10) } } }, 1, list2, new List<int>() { 1, 2 });
+            p.AddProfessor("3", a, Position.Lecturer, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(4, 1, 10) } } }, 1, list3, new List<int>() { 1 });
+            p.AddProfessor("4", a, Position.Lecturer, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(5, 1, 10) } } }, 1, list3, new List<int>() { 1 });
 
-            Professor professor = new Professor() { Name = "5", Subjects = a, Position = Position.Lecturer, Schedule = new Entity_Framework.LessonsDate() { DateTime = new DateTime(213, 1, 10) }, Experience = 1, Groups = list3, Courses = new List<int>() { 1, 2 } };
+            Professor professor = new Professor() { Name = "5",
+                                                    Subjects = a,
+                                                    Position = Position.Lecturer,
+                                                    Schedule = new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(213, 1, 10) } } },
+                                                    Experience = 1, 
+                                                    Groups = list3, 
+                                                    Courses = new List<int>() { 1, 2 } };
 
             /*var qwe = p.GetProfessorsBySubject(Subject.English);
             
@@ -71,7 +77,7 @@ namespace Kursova
                 this.textBox.Text += "\n";
             }*/
 
-            var qw = s.GetStudentsByCourse(2);
+            var qw = p.GetFreeByDate(new DateTime(5, 1, 10));
             foreach (var el in qw)
             {
                 this.textBox.Text += el.Name.ToString();
