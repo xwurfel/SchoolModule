@@ -42,10 +42,7 @@ namespace Kursova.Services
             return db.students.ToList().Where(x => x.CourseNumber == course).ToList();
         }
 
-        public void ClearOldDates()
-        {
-            
-        }
+       
 
 
         public void RemoveStudent(string name)
