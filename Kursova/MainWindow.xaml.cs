@@ -25,6 +25,7 @@ namespace Kursova
     {
         Services.StudentsService s;
         Services.ProfessorsService p;
+        Services.ScheduleService schedule;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,9 +34,10 @@ namespace Kursova
             //s.Clear();
             s = new StudentsService();
             p = new ProfessorsService();
+            schedule = new ScheduleService();
             s.ClearStudents();
             p.ClearProfessors();
-            p.ClearSchedules();
+            schedule.ClearSchedules();
             List<Subject> a = new List<Subject>() { Subject.English, Subject.Math, Subject.Physics };
             var list = new List<int>() { 1, 2, 3 };
             var list2 = new List<int>() { 1, 2, 3, 4 };
@@ -46,18 +48,23 @@ namespace Kursova
             s.AddStudent("4", 2, 1, a);
             s.AddStudent("5", 2, 1, a);
             s.AddStudent("6", 2, 1, a);
-            p.AddProfessor("1", a, Position.Rector, new List<Entity_Framework.LessonsDate>() {  new LessonsDate { DateTime = new DateTime(1, 1, 10) }, new LessonsDate { DateTime = new DateTime(2, 1, 10) } }, 1, list, new List<int>() { 1, 2});
-            p.AddProfessor("2", a, Position.Dean, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(3, 1, 10) } } }, 1, list2, new List<int>() { 1, 2 });
-            p.AddProfessor("3", a, Position.Lecturer, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(4, 1, 10) } } }, 1, list3, new List<int>() { 1 });
-            p.AddProfessor("4", a, Position.Lecturer, new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(5, 1, 10) } } }, 1, list3, new List<int>() { 1 });
+
+            p.AddProfessor("1", a, Position.Rector,/* new List<Entity_Framework.LessonsDate>() {  new LessonsDate { DateTime = new DateTime(1, 1, 10) }, new LessonsDate { DateTime = new DateTime(2, 1, 10) } },*/ 1, list, new List<int>() { 1, 2});
+            p.AddProfessor("2", a, Position.Dean,/* new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(3, 1, 10) } } },*/ 1, list2, new List<int>() { 1, 2 });
+            p.AddProfessor("3", a, Position.Lecturer, /*new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(4, 1, 10) } } },*/ 1, list3, new List<int>() { 1 });
+            p.AddProfessor("4", a, Position.Lecturer, /*new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(5, 1, 10) } } },*/ 1, list3, new List<int>() { 1 });
 
             Professor professor = new Professor() { Name = "5",
                                                     Subjects = a,
                                                     Position = Position.Lecturer,
-                                                    Schedule = new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(213, 1, 10) } } },
+                                                    //Schedule = new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(213, 1, 10) } } },
                                                     Experience = 1, 
                                                     Groups = list3, 
                                                     Courses = new List<int>() { 1, 2 } };
+
+            p.AddProfessor(professor);
+
+            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "1" );
 
             /*var qwe = p.GetProfessorsBySubject(Subject.English);
             
@@ -77,12 +84,12 @@ namespace Kursova
                 this.textBox.Text += "\n";
             }*/
 
-            var qw = p.GetFreeByDate(new DateTime(5, 1, 10));
+            /*var qw = p.GetFreeByDate(new DateTime(5, 1, 10));
             foreach (var el in qw)
             {
                 this.textBox.Text += el.Name.ToString();
                 this.textBox.Text += "\n";
-            }
+            }*/
 
         }
     }

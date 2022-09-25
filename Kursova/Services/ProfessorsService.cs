@@ -14,19 +14,27 @@ namespace Kursova.Services
         {
             db = new EntityLogicContext();
         }
-        public ProfessorsService(string name, List<Subject> subjects, Position position, List<LessonsDate> schedule, int experience, List<int> groups, List<int> courses)
+        public ProfessorsService(string name, List<Subject> subjects, Position position, /*List<LessonsDate> schedule,*/ int experience, List<int> groups, List<int> courses)
         {
             db = new EntityLogicContext();
-            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups =  groups, Courses = courses  };
-            db.dates.AddRange(p.Schedule);
+            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, /*Schedule = schedule,*/ Groups =  groups, Courses = courses  };
+            //db.dates.AddRange(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(string name, List<Subject> subjects, Position position, List<LessonsDate> schedule, int experience, List<int> groups, List<int> courses)
+        public void AddProfessor(string name, List<Subject> subjects, Position position, /*List<LessonsDate> schedule,*/ int experience, List<int> groups, List<int> courses)
         {
-            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, Schedule = schedule, Groups = groups, Courses = courses };
-            db.dates.AddRange(p.Schedule);
+            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, /*Schedule = schedule,*/ Groups = groups, Courses = courses };
+            //db.dates.AddRange(p.Schedule);
+            db.professors.Add(p);
+            db.SaveChanges();
+        }
+
+        public void AddProfessor(Professor professor)
+        {
+            Professor p = new() { Name = professor.Name, Subjects = professor.Subjects, Experience = professor.Experience, Position = professor.Position, /*Schedule = professor.Schedule,*/ Groups = professor.Groups, Courses = professor.Courses };
+            //db.dates.AddRange(p.Schedule);
             db.professors.Add(p);
             db.SaveChanges();
         }
@@ -56,30 +64,21 @@ namespace Kursova.Services
         {
             return db.professors.ToList().Where(x => x.Courses.Count == 1).ToList();
         }
-
-        public List<Professor> GetFreeByDate(DateTime dateTime)
+        //TODO
+        /*public List<Professor> GetFreeByDate(DateTime dateTime)
         {
             return db.professors.ToList().Where(x => !x.Schedule.Contains(new LessonsDate { DateTime = dateTime })).ToList();
-        }
+        }*/
 
 
-        public void ClearOldDates()
-        {
-            db.dates.RemoveRange(db.dates.Where(x => x.DateTime < DateTime.Now));
-            db.SaveChanges();
-        }
+        
 
-         
-
+     
         public void ClearProfessors()
         {
             db.professors.RemoveRange(db.professors);
             db.SaveChanges();
         }
-        public void ClearSchedules()
-        {
-            db.dates.RemoveRange(db.dates);
-            db.SaveChanges();
-        }
+        
     }
 }
