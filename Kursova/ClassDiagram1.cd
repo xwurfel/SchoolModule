@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Kursova.Entity_Framework.EntityLogicContext" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAARAAAAAAAAAAAAAAEAAAAAAAAAIAAAACAAA=</HashCode>
+      <FileName>Entity Framework\EntityLogicContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Entity_Framework.LessonsDate">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAgAAAAAAAAIAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity Framework\LessonsDate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Entity_Framework.Person">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity Framework\Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Entity_Framework.Professor">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAgAAAAAAAAAEAAAAAAAAAAABAAQAA=</HashCode>
+      <FileName>Entity Framework\Professor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Entity_Framework.Student">
+    <Position X="6.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAA=</HashCode>
+      <FileName>Entity Framework\Student.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Services.ProfessorsService" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQBAAAQACAAAAAgACAAAAEIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\ProfessorsService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Services.ScheduleService" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgQAAAAAAAAAAAAAAAAAAEAAAAEAAAAAAA=</HashCode>
+      <FileName>Services\ScheduleService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.Services.StudentsService" Collapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAQAAAAAAAAAIAAAAAAAAAAAAIAQAAAAAg=</HashCode>
+      <FileName>Services\StudentsService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.App" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Kursova.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAMAAAAAAAAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Enum Name="Kursova.Const.Position">
+    <Position X="8.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAQAAAAAAAgAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Const\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Kursova.Const.Subject">
+    <Position X="10.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAACAAAAIAAAAABAAAAIAAAAASAAAAAAA=</HashCode>
+      <FileName>Const\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

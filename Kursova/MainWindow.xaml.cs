@@ -64,7 +64,8 @@ namespace Kursova
 
             p.AddProfessor(professor);
 
-            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "1" );
+            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "4" );
+            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "2");
 
             /*var qwe = p.GetProfessorsBySubject(Subject.English);
             
@@ -90,6 +91,8 @@ namespace Kursova
                 this.textBox.Text += el.Name.ToString();
                 this.textBox.Text += "\n";
             }*/
+            foreach (var el in p.GetFreeByDate(new DateTime(1, 1, 1)))
+                this.textBox.Text += el.Name;
 
         }
     }

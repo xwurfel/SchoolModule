@@ -65,7 +65,7 @@ namespace Kursova.Entity_Framework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=database6.db");
+            optionsBuilder.UseSqlite("Data Source=database7.db");
         }
     }
 }

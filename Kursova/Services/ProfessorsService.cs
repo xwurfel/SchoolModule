@@ -64,14 +64,13 @@ namespace Kursova.Services
         {
             return db.professors.ToList().Where(x => x.Courses.Count == 1).ToList();
         }
-        //TODO
-        /*public List<Professor> GetFreeByDate(DateTime dateTime)
-        {
-            return db.professors.ToList().Where(x => !x.Schedule.Contains(new LessonsDate { DateTime = dateTime })).ToList();
-        }*/
 
 
         
+        public List<Professor> GetFreeByDate(DateTime dateTime)
+        {
+            return db.professors.ToList().Where(x => !db.dates.ToList().Select(y => y.ProfessorName).Contains(x.Name) || db.dates.ToList().Where(x => x.DateTime != dateTime).Select(x => x.ProfessorName).ToList().Contains(x.Name)).ToList();
+        }
 
      
         public void ClearProfessors()

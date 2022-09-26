@@ -10,7 +10,8 @@ namespace Kursova.Entity_Framework
 {
     internal class LessonsDate
     {
-        [Key]
+        
+        public int Id { get; set; }
         public DateTime DateTime { get; set; }
 
         public Const.Subject Subject { get; set; }
