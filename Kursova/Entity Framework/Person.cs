@@ -9,7 +9,6 @@ namespace Kursova.Entity_Framework
 {
     internal class Person
     {
-        [Key]
         public string Name { get; set; }
     }
 }

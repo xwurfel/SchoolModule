@@ -2,6 +2,7 @@
 using Kursova.Entity_Framework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,32 +18,37 @@ namespace Kursova.Services
             db = new EntityLogicContext();
         }
 
-        public StudentsService(string name, int courseNumber, int groupNumber, List<Subject> subjects)
+        public StudentsService(string Name, int GroupId)
         {
             db = new EntityLogicContext();
-            Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
+            Student s = new Student() { Group = db.groups.First(x => x.Id.Equals(GroupId)), Name = Name};
             db.students.Add(s);
             db.SaveChanges();
         }
 
-        public void AddStudent(string name, int courseNumber, int groupNumber, List<Subject> subjects)
+        public void AddStudent(string Name, int GroupId)
         {
-            Student s = new Student() { CourseNumber = courseNumber, GroupNumber = groupNumber, Name = name, Subjects = subjects };
+            Student s = new Student() { Group = db.groups.First(x => x.Id.Equals(GroupId)), Name = Name };
             db.students.Add(s);
             db.SaveChanges();
-
         }
+
+        
         public List<Student> GetStudentsByProfessor(Professor professor)
         {
-            return db.students.ToList().Where(x => professor.Courses.Contains(x.CourseNumber)).ToList();
+            if (professor == null)
+                throw new Exception("Professor must not be null!");
+           return db.dates.Include(x => x.Professor).Where(x => x.Professor == professor).Include(x => x.Group).Include(x => x.Group.students).SelectMany(x => x.Group.students).ToList();
         }
 
-        public List<Student> GetStudentsByCourse(int course)
+
+
+        public List<Student> GetStudentsByCourse(Course course)
         {
-            return db.students.ToList().Where(x => x.CourseNumber == course).ToList();
+            return db.students.Include(g => g.Group).Include(g => g.Group.Course).Where(x => x.Group.Course.Equals(course)).ToList();
         }
 
-       
+
 
 
         public void RemoveStudent(string name)

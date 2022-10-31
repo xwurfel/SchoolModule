@@ -25,75 +25,230 @@ namespace Kursova
     {
         Services.StudentsService s;
         Services.ProfessorsService p;
-        Services.ScheduleService schedule;
+        Services.DatesService dates;
+        Services.GroupCourseService groups;
+        Dates date;
         public MainWindow()
         {
             InitializeComponent();
-            //s = new Services.StudentsService("d123aadwwa1212ed", 1, 1, Const.Enums.Subject.Math);
-            //p = new Services.ProfessorsService("1121312", 0, 0, new Entity_Framework.LessonsDate() { DateTime = new DateTime(1, 11, 1)}, 1);
-            //s.Clear();
-            s = new StudentsService();
-            p = new ProfessorsService();
-            schedule = new ScheduleService();
-            s.ClearStudents();
-            p.ClearProfessors();
-            schedule.ClearSchedules();
-            List<Subject> a = new List<Subject>() { Subject.English, Subject.Math, Subject.Physics };
-            var list = new List<int>() { 1, 2, 3 };
-            var list2 = new List<int>() { 1, 2, 3, 4 };
-            var list3 = new List<int>() { 1 };
-            s.AddStudent("1", 1, 1, a);
-            s.AddStudent("2", 1, 1, a);
-            s.AddStudent("3", 1, 1, a);
-            s.AddStudent("4", 2, 1, a);
-            s.AddStudent("5", 2, 1, a);
-            s.AddStudent("6", 2, 1, a);
-
-            p.AddProfessor("1", a, Position.Rector,/* new List<Entity_Framework.LessonsDate>() {  new LessonsDate { DateTime = new DateTime(1, 1, 10) }, new LessonsDate { DateTime = new DateTime(2, 1, 10) } },*/ 1, list, new List<int>() { 1, 2});
-            p.AddProfessor("2", a, Position.Dean,/* new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(3, 1, 10) } } },*/ 1, list2, new List<int>() { 1, 2 });
-            p.AddProfessor("3", a, Position.Lecturer, /*new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(4, 1, 10) } } },*/ 1, list3, new List<int>() { 1 });
-            p.AddProfessor("4", a, Position.Lecturer, /*new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(5, 1, 10) } } },*/ 1, list3, new List<int>() { 1 });
-
-            Professor professor = new Professor() { Name = "5",
-                                                    Subjects = a,
-                                                    Position = Position.Lecturer,
-                                                    //Schedule = new List<Entity_Framework.LessonsDate>() { { new LessonsDate { DateTime = new DateTime(213, 1, 10) } } },
-                                                    Experience = 1, 
-                                                    Groups = list3, 
-                                                    Courses = new List<int>() { 1, 2 } };
-
-            p.AddProfessor(professor);
-
-            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "4" );
-            schedule.AddDate(new DateTime(1, 1, 1), Subject.Math, 1, 1, "2");
-
-            /*var qwe = p.GetProfessorsBySubject(Subject.English);
             
-            foreach(var el in qwe)
+            using (EntityLogicContext db = new EntityLogicContext())
             {
-                this.textBox.Text += el.Name.ToString();
-                this.textBox.Text += "\n";
-            }*/
+                db.Database.EnsureDeleted();
+                db.Database.EnsureCreated();
+                groups = new Services.GroupCourseService();
+            }
 
-
-            //this.textBox.Text = p.GetMostPopularBySubject(Subject.Math).Name ?? "123";
-
-            /*var qwe = p.GetFreeByDate(new DateTime(11, 1, 10));
-            foreach (var el in qwe)
+            groups.AddCourse("course 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM });
+            p = new Services.ProfessorsService("prof 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM }, Position.Lecturer, 2);
+            //date = new Dates() { Group = new Group { Id = 1 }, Subject = Subject.CDM, DateTime = new DateTime(1, 1, 1), Professor = new Professor() { } };
+            using(EntityLogicContext db = new EntityLogicContext())
             {
-                this.textBox.Text += el.Name.ToString() + " " + el.Position.ToString() + " " + el.Groups.Count.ToString() + " " + el.Schedule.DateTime.ToString();
-                this.textBox.Text += "\n";
-            }*/
+                
+            groups.AddGroup("Group 1", db.courses.OrderBy(x => x.Id).Last().Id);
+            }
+            dates = new DatesService(new DateTime(1, 1, 1), Subject.CDM, 1, 1);
+            s = new Services.StudentsService("aaa", 1);
 
-            /*var qw = p.GetFreeByDate(new DateTime(5, 1, 10));
-            foreach (var el in qw)
+            
+
+        }
+
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = (MenuItem)sender;
+            MessageBox.Show(menuItem.Header.ToString());
+        }
+
+
+        private void selectProfBySubjectBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var profService = new ProfessorsService();
+            var list = profService.GetBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
+
+
+            if(list is null || list.Count == 0)
             {
-                this.textBox.Text += el.Name.ToString();
-                this.textBox.Text += "\n";
-            }*/
-            foreach (var el in p.GetFreeByDate(new DateTime(1, 1, 1)))
-                this.textBox.Text += el.Name;
+                infotb.Text = "There are no professors, who are teaching this subject";
+                return;
+            }
 
+            infotb.Text = "";
+            
+
+            foreach(var el in list)
+            {
+                infotb.Text += el.Name;
+                infotb.Text += " ";
+            }
+        }
+
+
+        private void getMostPopularProfBySubject_Click(object sender, RoutedEventArgs e)
+        {
+            var profService = new ProfessorsService();
+            var prof = profService.GetMostPopularBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
+
+            if (prof is null)
+            {
+                infotb.Text = "There is none most popular";
+                return;
+            }
+
+            infotb.Text = prof.Name;
+        }
+
+        private void getProfessorsWithOnlyOneCourseBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var profService = new ProfessorsService();
+
+            var profs = profService.GetWithOnlyOneCourse();
+
+            infotb.Text = "";
+
+
+            if (profs is null || profs.Count == 0)
+            {
+                infotb.Text = "There are no professors with only one course";
+                return;
+            }
+
+
+
+            foreach (var el in profs)
+            {
+                infotb.Text += el.Name;
+                infotb.Text += " ";
+            }
+        }
+
+        private void OrderByPositionAndNameBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var profService = new ProfessorsService();
+
+            var profs = profService.SortByPositionThenByName();
+
+            infotb.Text = "";
+
+
+            if (profs is null || profs.Count == 0)
+            {
+                infotb.Text = "List is empty!";
+                return;
+            }
+
+
+
+            foreach (var el in profs)
+            {
+                infotb.Text += el.Position;
+                infotb.Text += " ";
+                infotb.Text += el.Name;
+                infotb.Text += "\n";
+            }
+        }
+
+        private void searchFreeByDateBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var dtInput = Array.ConvertAll(dateInputTb.Text.Split("-"), s => int.Parse(s));
+
+            if(!dtInput.Any())
+            {
+                infotb.Text = "Correct input needed!";
+                return;
+            }
+
+            DateTime dateTime = new DateTime(dtInput[0], dtInput[1], dtInput[2], dtInput[3], dtInput[4], 0);
+
+            var profService = new ProfessorsService();
+
+            var profs = profService.GetFreeByDate(dateTime);
+
+            infotb.Text = "";
+
+
+            if (profs is null || profs.Count == 0)
+            {
+                infotb.Text = "There are no free professors on that date!";
+                return;
+            }
+
+
+
+            foreach (var el in profs)
+            {
+                /*infotb.Text += el.Position;
+                infotb.Text += " ";*/
+                infotb.Text += el.Name;
+                infotb.Text += " ";
+            }
+
+        }
+
+        private void getStudentsByProfBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var studentService = new StudentsService();
+
+            var profService = new ProfessorsService();
+
+            if (profService is null || studentService is null)
+                throw new Exception();
+
+            var list = studentService.GetStudentsByProfessor(profService.GetByName(profNameTb.Text));
+
+
+            if (list is null || list.Count == 0)
+            {
+                infotb.Text = "There are no students, who are teached by that professor";
+                return;
+            }
+
+            infotb.Text = "";
+
+
+            foreach (var el in list)
+            {
+                infotb.Text += el.Name;
+                infotb.Text += " ";
+                //  infotb.Tag += ;
+            }
+
+        }
+
+        private void getStudentsByCourseBttn_Click(object sender, RoutedEventArgs e)
+        {
+            var studentService = new StudentsService();
+
+            var gcService = new GroupCourseService();
+
+            if (gcService is null || studentService is null)
+                throw new Exception();
+
+            var list = studentService.GetStudentsByCourse(gcService.GetCourseByName(courseNameTb.Text));
+
+
+            if (list is null || list.Count == 0)
+            {
+                infotb.Text = "There are no students, who are in that course";
+                return;
+            }
+
+            infotb.Text = "";
+
+
+            foreach (var el in list)
+            {
+                infotb.Text += el.Name;
+                infotb.Text += " ";
+                //  infotb.Tag += ;
+            }
+        }
+
+        private void AppendData_Click(object sender, RoutedEventArgs e)
+        {
+            AddInfoWindow win = new AddInfoWindow();
+            win.Show();
         }
     }
 }

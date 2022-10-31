@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using Kursova.Const;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -13,7 +12,9 @@ namespace Kursova.Entity_Framework
     {
         public DbSet<Student> students => Set<Student>();
         public DbSet<Professor> professors => Set<Professor>();
-        public DbSet<LessonsDate> dates => Set<LessonsDate>();
+        public DbSet<Dates> dates => Set<Dates>();
+        public DbSet<Course> courses => Set<Course>();
+        public DbSet<Group> groups => Set<Group>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,44 +29,27 @@ namespace Kursova.Entity_Framework
                       .ToList()
                 );
 
+           
+           
+
             modelBuilder
-                .Entity<Professor>()
-                .Property(e => e.Groups)
+                .Entity<Course>()
+                .Property(e => e.Subjects)
                 .HasConversion(
                     v => string.Join(",", v.Select(e => e.ToString("D")).ToArray()),
                     v => v.Split(new[] { ',' })
-                      .Select(e => int.Parse(e))
-                      .Cast<int>()
+                      .Select(e => Enum.Parse(typeof(Subject), e))
+                      .Cast<Subject>()
                       .ToList()
                 );
 
-            modelBuilder
-                .Entity<Professor>()
-                .Property(e => e.Courses)
-                .HasConversion(
-                    v => string.Join(",", v.Select(e => e.ToString("D")).ToArray()),
-                    v => v.Split(new[] { ',' })
-                      .Select(e => int.Parse(e))
-                      .Cast<int>()
-                      .ToList()
-                );
-
-            modelBuilder
-               .Entity<Student>()
-               .Property(e => e.Subjects)
-               .HasConversion(
-                   v => string.Join(",", v.Select(e => e.ToString("D")).ToArray()),
-                   v => v.Split(new[] { ',' })
-                     .Select(e => Enum.Parse(typeof(Subject), e))
-                     .Cast<Subject>()
-                     .ToList()
-               );
+            
         }
         public EntityLogicContext() => Database.EnsureCreated();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=database7.db");
+            optionsBuilder.UseSqlite("Data Source=database20.db");
         }
     }
 }

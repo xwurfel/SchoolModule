@@ -9,12 +9,14 @@ namespace Kursova.Entity_Framework
 {
     internal class Professor: Person
     {
+        public int Id { get; set; }
         public List<Const.Subject>? Subjects { get; set; }
-        public List<int>? Groups { get; set; }
-        public List<int>? Courses { get; set; }
+        
         public Const.Position Position { get; set; }
-        public List<LessonsDate>? Schedule { get; set; } = null;
+        
         public int Experience { get; set; } = 0;
+
+        public List<Dates> dates { get; set; }
 
     }
 }

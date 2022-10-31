@@ -4,27 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kursova"
+        xmlns:consten="clr-namespace:Kursova.Const"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TabControl>
-            <TabItem Header="1">
-                <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="textBox" HorizontalAlignment="Left" Margin="47,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="679" Height="291"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="2">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="3">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="4">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="5">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-        </TabControl>
+        Title="MainWindow" Height="540" Width="880">
+
+    <Grid Margin="0,0,0,-6">
+        <Menu Height="25" VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New Project" ></MenuItem>
+                <MenuItem Header="Open Project" ></MenuItem>
+                <Separator />
+                <MenuItem Header="Exit" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Edit" >
+                <MenuItem Header="Add Data" Click="AppendData_Click" ></MenuItem>
+                <MenuItem Header="Delete Data" ></MenuItem>
+            </MenuItem>
+        </Menu>
+
+
+        <TextBox x:Name="infotb" HorizontalAlignment="Left" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="860" Height="200"/>
+        <Button x:Name="selectProfBySubjectBttn" Content="Select Professors By Subject" HorizontalAlignment="Left" Margin="10,253,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.156,-1.268" Click="selectProfBySubjectBttn_Click" Width="180"/>
+        <ComboBox x:Name="subjectcb" HorizontalAlignment="Left" Margin="10,344,0,0" VerticalAlignment="Top" Width="180"
+                  ItemsSource="{consten:EnumBindingSource consten:Subject}" RenderTransformOrigin="0.492,0.548"/>
+        <Button x:Name="getMostPopularProfBySubject" Content="Get Most Popular Prof by Subject" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Click="getMostPopularProfBySubject_Click"/>
+        <Label x:Name="label1" Content="Selected subject" HorizontalAlignment="Left" Margin="22,315,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="getProfessorsWithOnlyOneCourseBttn" Content="Get Professors With Only 1 Course" HorizontalAlignment="Left" Margin="214,253,0,0" VerticalAlignment="Top" Click="getProfessorsWithOnlyOneCourseBttn_Click"/>
+        <Button x:Name="OrderByPositionAndNameBttn" Content="Order By Position and Name" HorizontalAlignment="Left" Margin="435,253,0,0" VerticalAlignment="Top" Width="167" Click="OrderByPositionAndNameBttn_Click"/>
+        <Button x:Name="searchFreeByDateBttn" Content="Search Free Professors by Date" HorizontalAlignment="Left" Margin="435,294,0,0" VerticalAlignment="Top" Click="searchFreeByDateBttn_Click"/>
+        <TextBox x:Name="dateInputTb" HorizontalAlignment="Left" Margin="435,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <Label x:Name="label2" Content="yyyy-mm-dd-hh-mm" HorizontalAlignment="Left" Margin="458,314,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"></Label>
+        <Button x:Name="getStudentsByProfBttn" Content="Get Students By Professor" HorizontalAlignment="Left" Margin="10,429,0,0" VerticalAlignment="Top" Width="180" Click="getStudentsByProfBttn_Click"/>
+        <TextBox x:Name="profNameTb" HorizontalAlignment="Left" Margin="10,471,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180"/>
+        <Label Content="Professor`s Name" HorizontalAlignment="Left" Margin="49,450,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="courseNameTb" HorizontalAlignment="Left" Margin="260,471,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="180" Height="18"/>
+        <Button x:Name="getStudentsByCourseBttn" Content="Get Students by Course" HorizontalAlignment="Left" Margin="260,429,0,0" VerticalAlignment="Top" Width="180" Click="getStudentsByCourseBttn_Click"/>
+        <Label Content="Course`s Name" HorizontalAlignment="Left" Margin="305,451,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Kursova.Const;
 using System;
+using System.Xml.Linq;
+using System.Data.Entity;
 
 namespace Kursova.Services
 {
@@ -14,28 +16,27 @@ namespace Kursova.Services
         {
             db = new EntityLogicContext();
         }
-        public ProfessorsService(string name, List<Subject> subjects, Position position, /*List<LessonsDate> schedule,*/ int experience, List<int> groups, List<int> courses)
+        public ProfessorsService(string name, List<Const.Subject>? subjects, Const.Position Position, int Experience)
         {
             db = new EntityLogicContext();
-            Professor p = new () { Name = name, Subjects = subjects, Experience = experience, Position = position, /*Schedule = schedule,*/ Groups =  groups, Courses = courses  };
-            //db.dates.AddRange(p.Schedule);
+            Professor p = new () { Name = name, Experience = Experience, Subjects = subjects, Position = Position};
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(string name, List<Subject> subjects, Position position, /*List<LessonsDate> schedule,*/ int experience, List<int> groups, List<int> courses)
+        public void AddProfessor(string name, List<Const.Subject>? subjects, Const.Position Position, int Experience)
         {
-            Professor p = new() { Name = name, Subjects = subjects, Experience = experience, Position = position, /*Schedule = schedule,*/ Groups = groups, Courses = courses };
-            //db.dates.AddRange(p.Schedule);
+            Professor p = new() { Name = name, Experience = Experience, Subjects = subjects, Position = Position };
+
             db.professors.Add(p);
             db.SaveChanges();
         }
 
-        public void AddProfessor(Professor professor)
+        public void AddProfessor(Professor p)
         {
-            Professor p = new() { Name = professor.Name, Subjects = professor.Subjects, Experience = professor.Experience, Position = professor.Position, /*Schedule = professor.Schedule,*/ Groups = professor.Groups, Courses = professor.Courses };
-            //db.dates.AddRange(p.Schedule);
-            db.professors.Add(p);
+            Professor pr = new() { Name = p.Name, Experience = p.Experience, Subjects = p.Subjects, Position = p.Position };
+
+            db.professors.Add(pr);
             db.SaveChanges();
         }
 
@@ -45,14 +46,27 @@ namespace Kursova.Services
             db.SaveChanges();
         }
 
+        public List<Professor> GetAll()
+        {
+            return db.professors.ToList();
+        }
+
+        public Professor? GetByName(string Name)
+        {
+            if(Name == null)
+                throw new ArgumentNullException("name");
+            return db.professors.FirstOrDefault(x => x.Name.Equals(Name));
+        }
+
         public List<Professor> GetBySubject(Subject subject)
         {
             return db.professors.ToList().Where(x => x.Subjects.Contains(subject)).ToList();
         }
 
+        
         public Professor? GetMostPopularBySubject(Subject subject)
         {
-            return GetBySubject(subject).MaxBy(x => x.Groups.Count);
+            return db.professors.First(x => x.Id.Equals(db.dates.Include(p => p.Professor).GroupBy(x => x.Professor.Id).OrderBy(x => x.Count()).Select(x => x.Key).First()));
         }
 
         public List<Professor> SortByPositionThenByName()
@@ -60,19 +74,20 @@ namespace Kursova.Services
             return db.professors.ToList().OrderBy(x => x.Position).ThenBy(x => x.Name).ToList();
         }
 
+
+        //course == subject? task error
         public List<Professor> GetWithOnlyOneCourse()
         {
-            return db.professors.ToList().Where(x => x.Courses.Count == 1).ToList();
+            return db.professors.ToList().Where(x => x.Subjects.Count == 1).ToList();
         }
 
 
-        
         public List<Professor> GetFreeByDate(DateTime dateTime)
         {
-            return db.professors.ToList().Where(x => !db.dates.ToList().Select(y => y.ProfessorName).Contains(x.Name) || db.dates.ToList().Where(x => x.DateTime != dateTime).Select(x => x.ProfessorName).ToList().Contains(x.Name)).ToList();
+            return db.dates.Include(p => p.Professor).Where(x => x.DateTime != dateTime).Select(x => x.Professor).ToList();
         }
 
-     
+
         public void ClearProfessors()
         {
             db.professors.RemoveRange(db.professors);
