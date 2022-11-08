@@ -24,11 +24,11 @@ namespace Kursova
     /// </summary>
     public partial class MainWindow : Window
     {
-        Services.StudentsService s;
-        Services.ProfessorsService p;
+        //Services.StudentsService s;
+        //Services.ProfessorsService p;
         Services.DatesService dates;
-        Services.GroupCourseService groups;
-        Dates date;
+        //Services.GroupCourseService groups;
+        //Dates date;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,11 +37,11 @@ namespace Kursova
             {
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
+
                 dates = new DatesService();
-
-                groups = new GroupCourseService();
+                //groups = new GroupCourseService();
             }
-
+/*
             groups.AddCourse("course 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM });
             groups.AddCourse("course 2", new List<Subject>() { Subject.Art, Subject.Physics, Subject.Programming });
             groups.AddCourse("course 3", new List<Subject>() { Subject.Math, Subject.English, Subject.Programming, Subject.History });
@@ -80,7 +80,7 @@ namespace Kursova
             s.AddStudent("stud 23", 2);
             s.AddStudent("stud 31", 3);
             s.AddStudent("stud 32", 3);
-            s.AddStudent("stud 33", 3);
+            s.AddStudent("stud 33", 3);*/
 
             dates.ClearOldDates();
         }
@@ -96,7 +96,18 @@ namespace Kursova
                 return;
             }
 
-            var list = profService.GetBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
+            List<Professor>? list = null;
+
+            try
+            {
+                list = profService.GetBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
+            }
+            catch(Exception ex)
+            {
+                infotb.Text = "There are no professors, who are teaching this subject";
+                return;
+            }
+
 
 
             if(list is null || list.Count == 0)
@@ -110,29 +121,51 @@ namespace Kursova
 
             foreach(var el in list)
             {
-                infotb.Text += el.Name;
-                infotb.Text += ", ";
+                infotb.Text += el.Id + " | " + el.Name + " | " + el.Experience + " | " + el.Position + " | ";
+                foreach (var sub in el.Subjects)
+                    infotb.Text += sub.ToString() + " | ";
+
+                infotb.Text += "\n";
             }
         }
 
 
         private void getMostPopularProfBySubject_Click(object sender, RoutedEventArgs e)
         {
+            infotb.Text = "";
             if (subjectcb.Text is null || subjectcb.Text.Length == 0)
             {
                 infotb.Text = "Subjects should be selected!";
                 return;
             }
-            var profService = new ProfessorsService();
-            var prof = profService.GetMostPopularBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
 
-            if (prof is null)
+            var profService = new ProfessorsService();
+            Professor? prof = null;
+
+            try
+            {
+                prof = profService.GetMostPopularBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
+            }
+            catch (Exception ex)
+            {
+                infotb.Text = "There are no professors, who are teaching this subject";
+                return;
+            }
+
+
+            if (prof is null)   
             {
                 infotb.Text = "There is none most popular";
                 return;
             }
 
-            infotb.Text = prof.Name;
+                infotb.Text += prof.Id + " | " + prof.Name + " | " + prof.Experience + " | " + prof.Position + " | ";
+            if(prof.Subjects != null && prof.Subjects.Any())
+                foreach (var sub in prof.Subjects)
+                    infotb.Text += sub.ToString() + " | ";
+
+                infotb.Text += "\n";
+           
         }
 
         private void getProfessorsWithOnlyOneCourseBttn_Click(object sender, RoutedEventArgs e)
@@ -154,8 +187,11 @@ namespace Kursova
 
             foreach (var el in profs)
             {
-                infotb.Text += el.Name;
-                infotb.Text += ", ";
+                infotb.Text += el.Id + " | " + el.Name + " | " + el.Experience + " | " + el.Position + " | ";
+                foreach (var sub in el.Subjects)
+                    infotb.Text += sub.ToString() + " | ";
+
+                infotb.Text += "\n";
             }
         }
 
@@ -178,10 +214,11 @@ namespace Kursova
 
             foreach (var el in profs)
             {
-                infotb.Text += el.Position;
-                infotb.Text += " ";
-                infotb.Text += el.Name;
-                infotb.Text += ",\n";
+                infotb.Text += el.Id + " | " + el.Name + " | " + el.Experience + " | " + el.Position + " | ";
+                foreach (var sub in el.Subjects)
+                    infotb.Text += sub.ToString() + " | ";
+
+                infotb.Text += "\n";
             }
         }
 
@@ -225,10 +262,11 @@ namespace Kursova
 
             foreach (var el in profs)
             {
-                /*infotb.Text += el.Position;
-                infotb.Text += " ";*/
-                infotb.Text += el.Name;
-                infotb.Text += " ";
+                infotb.Text += el.Id + " | " + el.Name + " | " + el.Experience + " | " + el.Position + " | ";
+                foreach (var sub in el.Subjects)
+                    infotb.Text += sub.ToString() + " | ";
+
+                infotb.Text += "\n";
             }
 
         }
@@ -269,7 +307,7 @@ namespace Kursova
             {
                 infotb.Text += el.Name;
                 infotb.Text += ", ";
-                //  infotb.Tag += ;
+                
             }
 
         }
