@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace Kursova.Services
 {
+    /// <summary>
+    /// Class that operates with Entity Student.
+    /// 
+    /// Has EntityLogicContext field to operate with database.
+    /// Has 6 methods to operate with Student Entity.
+    /// </summary>
     internal class StudentsService
     {
         EntityLogicContext db;
@@ -45,6 +51,8 @@ namespace Kursova.Services
 
         public List<Student> GetStudentsByCourse(Course course)
         {
+            if (course == null)
+                throw new Exception("Course must not be null!");
             return db.students.Include(g => g.Group).Include(g => g.Group.Course).Where(x => x.Group.Course.Equals(course)).ToList();
         }
 
@@ -53,6 +61,8 @@ namespace Kursova.Services
 
         public void RemoveStudent(string name)
         {
+            if (name == null)
+                throw new ArgumentNullException(name);
             db.students.Remove(db.students.First(x => x.Name.Equals(name)));
             db.SaveChanges();
         }

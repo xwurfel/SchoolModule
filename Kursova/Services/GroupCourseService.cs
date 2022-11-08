@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Kursova.Services
 {
@@ -27,6 +28,22 @@ namespace Kursova.Services
         {
             Group s = new() { Name = Name, Course = db.courses.First(x => x.Id == CourseId) };
             db.groups.Add(s);
+            db.SaveChanges();
+        }
+
+        public void RemoveGroup(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(name);
+            db.groups.Remove(db.groups.First(x => x.Name.Equals(name)));
+            db.SaveChanges();
+        }
+
+        public void RemoveCourse(string name)
+        {
+            if (name == null)
+                throw new ArgumentNullException(name);
+            db.courses.Remove(db.courses.First(x => x.Name.Equals(name)));
             db.SaveChanges();
         }
 

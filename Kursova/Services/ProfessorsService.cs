@@ -5,6 +5,7 @@ using Kursova.Const;
 using System;
 using System.Xml.Linq;
 using System.Data.Entity;
+using System.Windows.Documents;
 
 namespace Kursova.Services
 {
@@ -42,6 +43,8 @@ namespace Kursova.Services
 
         public void RemoveProfessor(string name)
         {
+            if (name == null)
+                throw new ArgumentNullException(name);
             db.professors.Remove(db.professors.First(x => x.Name.Equals(name)));
             db.SaveChanges();
         }
@@ -63,10 +66,17 @@ namespace Kursova.Services
             return db.professors.ToList().Where(x => x.Subjects.Contains(subject)).ToList();
         }
 
-        
         public Professor? GetMostPopularBySubject(Subject subject)
         {
-            return db.professors.First(x => x.Id.Equals(db.dates.Include(p => p.Professor).GroupBy(x => x.Professor.Id).OrderBy(x => x.Count()).Select(x => x.Key).First()));
+            var profList = db.dates.Include(p => p.Professor).Where(x => x.Subject.Equals(subject)).Select(x => x.Professor.Id ).AsEnumerable();
+
+            var query = from i in profList
+                        group i by i into g
+                        select new { g.Key, Count = g.Count() };
+
+            var max = query.MaxBy(x => x.Count).Key;
+            return db.professors.Where(x => x.Id.Equals(max)).First();
+            
         }
 
         public List<Professor> SortByPositionThenByName()
@@ -75,7 +85,6 @@ namespace Kursova.Services
         }
 
 
-        //course == subject? task error
         public List<Professor> GetWithOnlyOneCourse()
         {
             return db.professors.ToList().Where(x => x.Subjects.Count == 1).ToList();
@@ -84,8 +93,17 @@ namespace Kursova.Services
 
         public List<Professor> GetFreeByDate(DateTime dateTime)
         {
-            return db.dates.Include(p => p.Professor).Where(x => x.DateTime != dateTime).Select(x => x.Professor).ToList();
+            var list = db.dates.Include(p => p.Professor).Select(x => new { ProfId = x.Professor.Id, date = x.DateTime }).ToList();
+
+            var profIdList = list.Where(x => x.date.Equals(dateTime)).Select(x => x.ProfId);
+
+            list.RemoveAll(x => profIdList.Contains(x.ProfId));
+
+            var l2 = list.Select(x => x.ProfId);
+
+            return db.professors.Where(x => l2.Contains(x.Id)).ToList();
         }
+
 
 
         public void ClearProfessors()

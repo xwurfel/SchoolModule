@@ -30,6 +30,16 @@ namespace Kursova.Services
             db.dates.Add(dates);
             db.SaveChanges();
         }
+
+        public void RemoveDate(string groupName, DateTime date)
+        {
+            if (groupName == null)
+                throw new ArgumentNullException(groupName);
+
+            db.dates.Remove(db.dates.First(x => x.Group.Name.Equals(groupName) && x.DateTime.Equals(date)));
+            db.SaveChanges();
+        }
+
         public void ClearOldDates()
         {
             db.dates.RemoveRange(db.dates.Where(x => x.DateTime < DateTime.Now));

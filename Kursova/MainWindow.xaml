@@ -10,15 +10,10 @@
 
     <Grid Margin="0,0,0,-6">
         <Menu Height="25" VerticalAlignment="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="New Project" ></MenuItem>
-                <MenuItem Header="Open Project" ></MenuItem>
-                <Separator />
-                <MenuItem Header="Exit" ></MenuItem>
-            </MenuItem>
+            
             <MenuItem Header="Edit" >
                 <MenuItem Header="Add Data" Click="AppendData_Click" ></MenuItem>
-                <MenuItem Header="Delete Data" ></MenuItem>
+                <MenuItem Header="Delete Data" Click="DeleteData_Click" ></MenuItem>
             </MenuItem>
         </Menu>
 

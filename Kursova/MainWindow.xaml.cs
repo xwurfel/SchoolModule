@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -36,35 +37,65 @@ namespace Kursova
             {
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
-                groups = new Services.GroupCourseService();
+                dates = new DatesService();
+
+                groups = new GroupCourseService();
             }
 
             groups.AddCourse("course 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM });
-            p = new Services.ProfessorsService("prof 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM }, Position.Lecturer, 2);
+            groups.AddCourse("course 2", new List<Subject>() { Subject.Art, Subject.Physics, Subject.Programming });
+            groups.AddCourse("course 3", new List<Subject>() { Subject.Math, Subject.English, Subject.Programming, Subject.History });
+            p = new ProfessorsService("prof 1", new List<Subject>() { Subject.Math, Subject.English, Subject.CDM }, Position.Lecturer, 12);
+
+            p.AddProfessor("prof 2", new List<Subject>() { Subject.Math, Subject.Programming, Subject.Physics }, Position.Assistant, 1);
+
+            p.AddProfessor("prof 3", new List<Subject>() { Subject.Art, Subject.Programming, Subject.History }, Position.Assistant, 1);
             //date = new Dates() { Group = new Group { Id = 1 }, Subject = Subject.CDM, DateTime = new DateTime(1, 1, 1), Professor = new Professor() { } };
-            using(EntityLogicContext db = new EntityLogicContext())
+            using (EntityLogicContext db = new EntityLogicContext())
             {
-                
-            groups.AddGroup("Group 1", db.courses.OrderBy(x => x.Id).Last().Id);
+            groups.AddGroup("group 1", db.courses.OrderBy(x => x.Id).First().Id);
+
+            groups.AddGroup("group 2", db.courses.OrderBy(x => x.Id).Skip(1).First().Id);
+
+            groups.AddGroup("group 3", db.courses.OrderBy(x => x.Id).Skip(2).First().Id);
             }
-            dates = new DatesService(new DateTime(1, 1, 1), Subject.CDM, 1, 1);
-            s = new Services.StudentsService("aaa", 1);
-
-            
-
-        }
 
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem menuItem = (MenuItem)sender;
-            MessageBox.Show(menuItem.Header.ToString());
+            dates = new DatesService(new DateTime(2022, 12, 3, 12, 15, 0), Subject.CDM, 1, 1);
+
+            dates = new DatesService(new DateTime(2022, 12, 3, 12, 15, 0), Subject.Programming, 2, 2);
+
+            dates = new DatesService(new DateTime(2022, 12, 3, 12, 15, 0), Subject.History, 3, 3);
+
+
+            dates = new DatesService(new DateTime(2022, 12, 4, 12, 15, 0), Subject.History, 3, 2);
+
+
+            dates = new DatesService(new DateTime(2021, 12, 3, 12, 15, 0), Subject.History, 3, 2);
+            s = new StudentsService("stud 11", 1);
+            s.AddStudent("stud 12", 1);
+            s.AddStudent("stud 13", 1);
+            s.AddStudent("stud 21", 2);
+            s.AddStudent("stud 22", 2);
+            s.AddStudent("stud 23", 2);
+            s.AddStudent("stud 31", 3);
+            s.AddStudent("stud 32", 3);
+            s.AddStudent("stud 33", 3);
+
+            dates.ClearOldDates();
         }
 
 
         private void selectProfBySubjectBttn_Click(object sender, RoutedEventArgs e)
         {
             var profService = new ProfessorsService();
+
+            if (subjectcb.Text is null || subjectcb.Text.Length == 0)
+            {
+                infotb.Text = "Subjects should be selected!";
+                return;
+            }
+
             var list = profService.GetBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
 
 
@@ -80,13 +111,18 @@ namespace Kursova
             foreach(var el in list)
             {
                 infotb.Text += el.Name;
-                infotb.Text += " ";
+                infotb.Text += ", ";
             }
         }
 
 
         private void getMostPopularProfBySubject_Click(object sender, RoutedEventArgs e)
         {
+            if (subjectcb.Text is null || subjectcb.Text.Length == 0)
+            {
+                infotb.Text = "Subjects should be selected!";
+                return;
+            }
             var profService = new ProfessorsService();
             var prof = profService.GetMostPopularBySubject((Subject)Enum.Parse(typeof(Subject), subjectcb.Text));
 
@@ -119,7 +155,7 @@ namespace Kursova
             foreach (var el in profs)
             {
                 infotb.Text += el.Name;
-                infotb.Text += " ";
+                infotb.Text += ", ";
             }
         }
 
@@ -145,19 +181,30 @@ namespace Kursova
                 infotb.Text += el.Position;
                 infotb.Text += " ";
                 infotb.Text += el.Name;
-                infotb.Text += "\n";
+                infotb.Text += ",\n";
             }
         }
 
         private void searchFreeByDateBttn_Click(object sender, RoutedEventArgs e)
         {
-            var dtInput = Array.ConvertAll(dateInputTb.Text.Split("-"), s => int.Parse(s));
-
-            if(!dtInput.Any())
+            int[] dtInput;
+            try
             {
-                infotb.Text = "Correct input needed!";
+                dtInput = Array.ConvertAll(dateInputTb.Text.Split("-"), s => int.Parse(s));
+
+            }
+            catch(Exception ex)
+            {
+                infotb.Text=ex.Message;
                 return;
             }
+
+            if(dtInput.Length != 5)
+            {
+                infotb.Text = "Correct input needed!";
+                return ;
+            }
+
 
             DateTime dateTime = new DateTime(dtInput[0], dtInput[1], dtInput[2], dtInput[3], dtInput[4], 0);
 
@@ -193,16 +240,27 @@ namespace Kursova
             var profService = new ProfessorsService();
 
             if (profService is null || studentService is null)
-                throw new Exception();
-
-            var list = studentService.GetStudentsByProfessor(profService.GetByName(profNameTb.Text));
-
-
-            if (list is null || list.Count == 0)
             {
-                infotb.Text = "There are no students, who are teached by that professor";
+                infotb.Text = "Error!";
+                return ;
+            }
+
+
+            List<Student>? list = null;
+
+            try
+            {
+
+                list = studentService.GetStudentsByProfessor(profService.GetByName(profNameTb.Text));
+
+            }
+            catch(Exception exc)
+            {
+                infotb.Text = exc.Message;
                 return;
             }
+
+            
 
             infotb.Text = "";
 
@@ -210,7 +268,7 @@ namespace Kursova
             foreach (var el in list)
             {
                 infotb.Text += el.Name;
-                infotb.Text += " ";
+                infotb.Text += ", ";
                 //  infotb.Tag += ;
             }
 
@@ -223,16 +281,28 @@ namespace Kursova
             var gcService = new GroupCourseService();
 
             if (gcService is null || studentService is null)
-                throw new Exception();
-
-            var list = studentService.GetStudentsByCourse(gcService.GetCourseByName(courseNameTb.Text));
-
-
-            if (list is null || list.Count == 0)
             {
-                infotb.Text = "There are no students, who are in that course";
+                infotb.Text = "Error!";
                 return;
             }
+
+
+
+            List<Student>? list = null;
+
+            try
+            {
+
+                list = studentService.GetStudentsByCourse(gcService.GetCourseByName(courseNameTb.Text));
+
+            }
+            catch (Exception exc)
+            {
+                infotb.Text = exc.Message;
+                return;
+            }
+
+            
 
             infotb.Text = "";
 
@@ -240,7 +310,7 @@ namespace Kursova
             foreach (var el in list)
             {
                 infotb.Text += el.Name;
-                infotb.Text += " ";
+                infotb.Text += ", ";
                 //  infotb.Tag += ;
             }
         }
@@ -248,6 +318,13 @@ namespace Kursova
         private void AppendData_Click(object sender, RoutedEventArgs e)
         {
             AddInfoWindow win = new AddInfoWindow();
+            win.Show();
+        }
+
+        private void DeleteData_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteInfoPage win = new DeleteInfoPage();
+
             win.Show();
         }
     }

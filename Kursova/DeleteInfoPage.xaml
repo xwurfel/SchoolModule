@@ -1,0 +1,35 @@
+﻿<Window x:Class="Kursova.DeleteInfoPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Kursova"
+        mc:Ignorable="d"
+        Title="DeleteInfoPage" Height="450" Width="800">
+    <Grid>
+        <TextBox x:Name="profNametb" HorizontalAlignment="Left" Margin="31,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
+        <Label Content="Delete professor" HorizontalAlignment="Left" Margin="49,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.667,-0.81" Width="113" Height="24"/>
+        <Button x:Name="profsubmit" Content="Submit" HorizontalAlignment="Left" Margin="30,83,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.663" Width="139" Height="27" Click="profsubmit_Click"/>
+        <Label Content="Professor`s Name" HorizontalAlignment="Left" Margin="49,33,0,0" VerticalAlignment="Top" Height="24"/>
+        <Label Content="Delete Student" HorizontalAlignment="Left" Margin="266,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.667,-0.81" Width="80" Height="24"/>
+        <Label Content="Student`s Name" HorizontalAlignment="Left" Margin="255,33,0,0" VerticalAlignment="Top" Height="24"/>
+        <TextBox x:Name="StudentNameTb" HorizontalAlignment="Left" Margin="237,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23" RenderTransformOrigin="0.5,0.642"/>
+        <Label Content="Delete Group" HorizontalAlignment="Left" Margin="269,107,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.667,-0.81" Width="97" Height="24"/>
+        <Label Content="Group`s Name" HorizontalAlignment="Left" Margin="263,125,0,0" VerticalAlignment="Top" Height="24"/>
+        <TextBox x:Name="GroupNameTb" HorizontalAlignment="Left" Margin="237,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23" RenderTransformOrigin="0.5,0.642"/>
+        <Button x:Name="GroupSubmitBttn" Content="Submit" HorizontalAlignment="Left" Margin="237,190,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Width="138" Height="27" Click="groupsubmit_Click"/>
+        <Label Content="Delete Course" HorizontalAlignment="Left" Margin="452,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.667,-0.81" Width="82" Height="24"/>
+        <Label Content="Course`s Name" HorizontalAlignment="Left" Margin="448,33,0,0" VerticalAlignment="Top" Height="24"/>
+        <TextBox x:Name="courseNameTb" HorizontalAlignment="Left" Margin="430,55,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23"/>
+        <Label Content="Delete Date" HorizontalAlignment="Left" Margin="56,110,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.667,-0.81" Width="87" Height="24"/>
+        <Label Content="Group`s Name" HorizontalAlignment="Left" Margin="50,130,0,0" VerticalAlignment="Top" Height="24"/>
+        <TextBox x:Name="dateGroupNameTb" HorizontalAlignment="Left" Margin="24,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" Height="23" RenderTransformOrigin="0.5,0.642"/>
+        <Button x:Name="courseSubmitBttn" Content="Submit" HorizontalAlignment="Left" Margin="431,83,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.663" Width="136" Height="27" Click="courseSubmitBttn_Click"/>
+        <TextBox x:Name="logTb" HorizontalAlignment="Center" Margin="0,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="732" Height="110"/>
+        <TextBox x:Name="dateInputTb" HorizontalAlignment="Left" Margin="23,199,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140"/>
+        <Label x:Name="label2" Content="yyyy-mm-dd-hh-mm" HorizontalAlignment="Left" Margin="33,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"/>
+        <Button x:Name="studentSubmitBttn" Content="Submit" HorizontalAlignment="Left" Margin="239,83,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.663" Width="136" Height="27" Click="studentSubmitBttn_Click"/>
+        <Button x:Name="dateSubmitBttn" Content="Submit" HorizontalAlignment="Left" Margin="25,234,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.495,0.663" Width="138" Height="27" Click="dateSubmitBttn_Click"/>
+
+    </Grid>
+</Window>
